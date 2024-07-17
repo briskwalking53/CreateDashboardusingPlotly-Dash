@@ -20,7 +20,7 @@ data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain
 app = dash.Dash(__name__)
 
 # Set the title of the dashboard
-app.title = "Automobile Statistics Dashboard"
+# app.title = "Automobile Statistics Dashboard"
 
 #---------------------------------------------------------------------------------
 # Create the dropdown menu options
@@ -43,16 +43,21 @@ app.layout = html.Div([
             id='dropdown-statistics',
             options=dropdown_options,
             value='Select Statistics',
-            placeholder='Select a report type'
+            placeholder='Select a report type',
+            style={'width':'80%', 'padding':3, 'font-size':20}
         )
     ]),
     html.Div(dcc.Dropdown(
             id='select-year',
             options=[{'label': i, 'value': i} for i in year_list],
-            value='select-year'
+            value='select-year',
+            placeholder='Select Year',
+            style={'width':'80%', 'padding':3, 'font-size':20}
         )),
     html.Div([#TASK 2.3: Add a division for output display
-    html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),])
+        html.Div(id='output-container', className='chart-grid', style={'display':'flex'})
+#        ,])
+    ])
 ])
 #TASK 2.4: Creating Callbacks
 # Define the callback function to update the input container based on the selected statistics
@@ -70,10 +75,10 @@ def update_input_container(selected_statistics):
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='output-container', component_property='children'),
-    [Input(component_id='select-year', component_property='value'), Input(component_id='dropdown-statistics', component_property='value')])
+    [Input(component_id='dropdown-statistics',component_property='value'), Input(component_id='select-year', component_property='value')])
 
 
-def update_output_container(input_year, selected_statistics):
+def update_output_container(selected_statistics,input_year):
     if selected_statistics == 'Recession Period Statistics':
         # Filter the data for recession periods
         recession_data = data[data['Recession'] == 1]
@@ -179,4 +184,3 @@ def update_output_container(input_year, selected_statistics):
 # Run the Dash app
 if __name__ == '__main__':
     app.run_server(debug=False)
-
